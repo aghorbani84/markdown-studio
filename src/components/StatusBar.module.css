@@ -1,17 +1,41 @@
+/* Status bar: quiet, one line, tabular numbers, dot separators.
+   The saved state is the only green on the bar. */
+
 .statusBar {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 20px;
+  gap: 4px 8px;
   align-items: center;
-  padding: 8px 16px;
-  font-size: 0.82rem;
+  flex: none;
+  height: 34px;
+  padding: 0 21px;
+  font-size: 12.5px;
   color: var(--muted);
   background: var(--surface);
   border-top: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+
+.statusBar span + span::before {
+  content: '·';
+  margin-right: 8px;
+  color: var(--faint);
 }
 
 .saved {
   margin-left: auto;
-  color: var(--accent);
+  color: var(--success);
   font-weight: 600;
+}
+
+/* The saved item replaces the dot separator with its own green dot. */
+.statusBar .saved::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  vertical-align: 1px;
 }

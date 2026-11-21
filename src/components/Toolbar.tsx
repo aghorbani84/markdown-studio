@@ -1,3 +1,18 @@
+import {
+  Bold,
+  Code,
+  Heading1,
+  Heading2,
+  Heading3,
+  Italic,
+  Link2,
+  List,
+  ListOrdered,
+  Minus,
+  Quote,
+  SquareCode,
+  type LucideIcon,
+} from 'lucide-react';
 import { useEditor } from '../state/store';
 import styles from './Toolbar.module.css';
 
@@ -9,21 +24,31 @@ interface Snippet {
   placeholder: string;
   /** Insert on its own line instead of inline. */
   block?: boolean;
+  icon: LucideIcon;
 }
 
 const SNIPPETS: Snippet[] = [
-  { label: 'B', title: 'Bold', before: '**', after: '**', placeholder: 'bold text' },
-  { label: 'I', title: 'Italic', before: '*', after: '*', placeholder: 'italic text' },
-  { label: 'H1', title: 'Heading 1', before: '# ', after: '', placeholder: 'Heading', block: true },
-  { label: 'H2', title: 'Heading 2', before: '## ', after: '', placeholder: 'Heading', block: true },
-  { label: 'H3', title: 'Heading 3', before: '### ', after: '', placeholder: 'Heading', block: true },
-  { label: '• List', title: 'Bulleted list', before: '- ', after: '', placeholder: 'List item', block: true },
-  { label: '1. List', title: 'Numbered list', before: '1. ', after: '', placeholder: 'List item', block: true },
-  { label: 'Link', title: 'Link', before: '[', after: '](https://example.com)', placeholder: 'link text' },
-  { label: '</>', title: 'Inline code', before: '`', after: '`', placeholder: 'code' },
-  { label: 'Code', title: 'Code block', before: '```\n', after: '\n```', placeholder: 'code', block: true },
-  { label: 'Quote', title: 'Quote', before: '> ', after: '', placeholder: 'Quote', block: true },
-  { label: '—', title: 'Horizontal rule', before: '\n---\n', after: '', placeholder: '', block: true },
+  { label: 'B', title: 'Bold', before: '**', after: '**', placeholder: 'bold text', icon: Bold },
+  { label: 'I', title: 'Italic', before: '*', after: '*', placeholder: 'italic text', icon: Italic },
+  { label: 'H1', title: 'Heading 1', before: '# ', after: '', placeholder: 'Heading', block: true, icon: Heading1 },
+  { label: 'H2', title: 'Heading 2', before: '## ', after: '', placeholder: 'Heading', block: true, icon: Heading2 },
+  { label: 'H3', title: 'Heading 3', before: '### ', after: '', placeholder: 'Heading', block: true, icon: Heading3 },
+  { label: '• List', title: 'Bulleted list', before: '- ', after: '', placeholder: 'List item', block: true, icon: List },
+  { label: '1. List', title: 'Numbered list', before: '1. ', after: '', placeholder: 'List item', block: true, icon: ListOrdered },
+  { label: 'Link', title: 'Link', before: '[', after: '](https://example.com)', placeholder: 'link text', icon: Link2 },
+  { label: '</>', title: 'Inline code', before: '`', after: '`', placeholder: 'code', icon: Code },
+  { label: 'Code', title: 'Code block', before: '```\n', after: '\n```', placeholder: 'code', block: true, icon: SquareCode },
+  { label: 'Quote', title: 'Quote', before: '> ', after: '', placeholder: 'Quote', block: true, icon: Quote },
+  { label: '—', title: 'Horizontal rule', before: '\n---\n', after: '', placeholder: '', block: true, icon: Minus },
+];
+
+/** Toolbar groups, in the order the formatting decisions are made. */
+const GROUPS: Snippet[][] = [
+  SNIPPETS.slice(0, 2),
+  SNIPPETS.slice(2, 5),
+  SNIPPETS.slice(5, 7),
+  SNIPPETS.slice(7, 9),
+  SNIPPETS.slice(9, 12),
 ];
 
 /**
@@ -66,17 +91,24 @@ export function Toolbar() {
 
   return (
     <div className={styles.toolbar} role="toolbar" aria-label="Formatting toolbar">
-      {SNIPPETS.map((snippet) => (
-        <button
-          key={snippet.title}
-          type="button"
-          className={styles.button}
-          title={snippet.title}
-          aria-label={snippet.title}
-          onClick={() => insert(snippet)}
-        >
-          {snippet.label}
-        </button>
+      {GROUPS.map((group, gi) => (
+        <div key={gi} className={styles.group} role="group" aria-label={`Formatting group ${gi + 1}`}>
+          {group.map((snippet) => {
+            const Icon = snippet.icon;
+            return (
+              <button
+                key={snippet.title}
+                type="button"
+                className={styles.button}
+                title={snippet.title}
+                aria-label={snippet.title}
+                onClick={() => insert(snippet)}
+              >
+                <Icon size={16} strokeWidth={2} aria-hidden />
+              </button>
+            );
+          })}
+        </div>
       ))}
     </div>
   );

@@ -1,3 +1,5 @@
+/* Editor pane: a flat sheet, no card — the text is the subject. */
+
 .pane {
   display: flex;
   flex-direction: column;
@@ -5,7 +7,7 @@
   min-height: 0;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
@@ -13,22 +15,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 14px;
+  flex: none;
+  height: 34px;
+  padding: 0 21px;
   border-bottom: 1px solid var(--border);
-  background: var(--surface-muted);
 }
 
 .paneTitle {
-  font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--text);
+  color: var(--text-strong);
 }
 
 .paneHint {
-  font-size: 0.8rem;
-  color: var(--muted);
+  font-size: 12px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
 }
 
 .textarea {
@@ -38,16 +42,21 @@
   resize: none;
   border: none;
   outline: none;
-  padding: 16px;
+  padding: 21px;
   box-sizing: border-box;
-  font-family: ui-monospace, 'SF Mono', Consolas, 'Liberation Mono', monospace;
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 14px;
+  line-height: 1.7;
   color: var(--text);
   background: transparent;
+  caret-color: var(--accent);
   tab-size: 2;
 }
 
+.textarea:focus {
+  background: var(--surface);
+}
+
 .textarea::placeholder {
-  color: var(--muted);
+  color: var(--faint);
 }

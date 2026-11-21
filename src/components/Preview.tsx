@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { FileText } from 'lucide-react';
 import { renderMarkdown } from '../lib/markdown';
 import { useEditor } from '../state/store';
 import styles from './Preview.module.css';
@@ -6,6 +7,7 @@ import styles from './Preview.module.css';
 export function Preview() {
   const { state } = useEditor();
   const html = useMemo(() => renderMarkdown(state.markdown), [state.markdown]);
+  const isEmpty = state.markdown.trim() === '';
 
   return (
     <section className={styles.pane} aria-label="Rendered preview">
@@ -13,10 +15,24 @@ export function Preview() {
         <span className={styles.paneTitle}>Preview</span>
         <span className={styles.paneHint}>Rendered</span>
       </header>
-      <div
-        className={styles.preview}
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <div className={styles.scroll}>
+        <div className={styles.page}>
+          {isEmpty ? (
+            <div className={styles.empty}>
+              <FileText size={21} strokeWidth={1.5} aria-hidden />
+              <span className={styles.emptyTitle}>Nothing to preview yet</span>
+              <span className={styles.emptyHint}>
+                Start typing in the editor — your document takes shape here.
+              </span>
+            </div>
+          ) : (
+            <div
+              className={styles.preview}
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
+          )}
+        </div>
+      </div>
     </section>
   );
 }

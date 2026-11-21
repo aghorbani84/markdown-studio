@@ -1,4 +1,16 @@
 import { useState } from 'react';
+import {
+  Columns2,
+  Copy,
+  Download,
+  FileDown,
+  FileText,
+  Moon,
+  PanelLeft,
+  PanelRight,
+  RotateCcw,
+  Sun,
+} from 'lucide-react';
 import { EditorProvider, useEditor, type ViewMode } from './state/store';
 import { Toolbar } from './components/Toolbar';
 import { Editor } from './components/Editor';
@@ -42,10 +54,10 @@ async function copyToClipboard(text: string): Promise<boolean> {
   }
 }
 
-const VIEW_MODES: { id: ViewMode; label: string }[] = [
-  { id: 'split', label: 'Split' },
-  { id: 'editor', label: 'Editor' },
-  { id: 'preview', label: 'Preview' },
+const VIEW_MODES: { id: ViewMode; label: string; icon: typeof Columns2 }[] = [
+  { id: 'split', label: 'Split', icon: Columns2 },
+  { id: 'editor', label: 'Editor', icon: PanelLeft },
+  { id: 'preview', label: 'Preview', icon: PanelRight },
 ];
 
 function Shell() {
@@ -79,27 +91,37 @@ function Shell() {
     <div className={styles.app}>
       <header className={styles.header}>
         <div className={styles.brand}>
-          <h1 className={styles.title}>Markdown Studio</h1>
-          <span className={styles.subtitle}>Live Markdown editor &amp; preview</span>
+          <FileText size={18} strokeWidth={2} className={styles.brandIcon} aria-hidden />
+          <div className={styles.brandText}>
+            <h1 className={styles.title}>Markdown Studio</h1>
+            <span className={styles.subtitle}>Live Markdown editor &amp; preview</span>
+          </div>
         </div>
         <div className={styles.actions}>
           <div className={styles.viewToggle} role="group" aria-label="Layout">
-            {VIEW_MODES.map((mode) => (
-              <button
-                key={mode.id}
-                type="button"
-                className={`${styles.viewButton} ${state.viewMode === mode.id ? styles.viewButtonActive : ''}`}
-                aria-pressed={state.viewMode === mode.id}
-                onClick={() => dispatch({ type: 'SET_VIEW_MODE', payload: mode.id })}
-              >
-                {mode.label}
-              </button>
-            ))}
+            {VIEW_MODES.map((mode) => {
+              const Icon = mode.icon;
+              return (
+                <button
+                  key={mode.id}
+                  type="button"
+                  className={`${styles.viewButton} ${state.viewMode === mode.id ? styles.viewButtonActive : ''}`}
+                  aria-pressed={state.viewMode === mode.id}
+                  onClick={() => dispatch({ type: 'SET_VIEW_MODE', payload: mode.id })}
+                >
+                  <Icon size={15} strokeWidth={2} aria-hidden />
+                  {mode.label}
+                </button>
+              );
+            })}
           </div>
+          <span className={styles.actionsDivider} aria-hidden />
           <button type="button" className={styles.actionButton} onClick={copyHtml}>
+            <Copy size={15} strokeWidth={2} aria-hidden />
             Copy HTML
           </button>
-          <button type="button" className={styles.actionButton} onClick={exportMarkdown}>
+          <button type="button" className={`${styles.actionButton} ${styles.bordered}`} onClick={exportMarkdown}>
+            <FileDown size={15} strokeWidth={2} aria-hidden />
             Export .md
           </button>
           <button
@@ -107,25 +129,33 @@ function Shell() {
             className={`${styles.actionButton} ${styles.primary}`}
             onClick={exportHtml}
           >
+            <Download size={15} strokeWidth={2} aria-hidden />
             Export .html
           </button>
           <button
             type="button"
-            className={styles.actionButton}
+            className={`${styles.actionButton} ${styles.iconOnly}`}
             onClick={() => {
               dispatch({ type: 'RESET_DOCUMENT' });
               flash('Sample document restored');
             }}
+            aria-label="Reset document"
+            title="Reset document"
           >
-            Reset
+            <RotateCcw size={15} strokeWidth={2} aria-hidden />
           </button>
           <button
             type="button"
-            className={styles.actionButton}
+            className={`${styles.actionButton} ${styles.iconOnly}`}
             onClick={() => dispatch({ type: 'TOGGLE_THEME' })}
             aria-label={`Switch to ${state.theme === 'light' ? 'dark' : 'light'} mode`}
+            title={`Switch to ${state.theme === 'light' ? 'dark' : 'light'} mode`}
           >
-            {state.theme === 'light' ? 'Dark mode' : 'Light mode'}
+            {state.theme === 'light' ? (
+              <Moon size={15} strokeWidth={2} aria-hidden />
+            ) : (
+              <Sun size={15} strokeWidth={2} aria-hidden />
+            )}
           </button>
         </div>
       </header>

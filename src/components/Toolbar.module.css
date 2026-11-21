@@ -1,31 +1,54 @@
+/* Formatting toolbar: quiet icon buttons in hairline-divided groups,
+   one 16px icon family at one stroke weight. */
+
 .toolbar {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 10px 16px;
+  gap: 8px;
+  flex: none;
+  padding: 6px 21px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
 
+.group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.group + .group {
+  padding-left: 9px;
+  border-left: 1px solid var(--border-strong);
+}
+
 .button {
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 6px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--bg);
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
   color: var(--text);
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .button:hover {
+  background: var(--surface-muted);
+  color: var(--text-strong);
+}
+
+.button:active {
   background: var(--accent-soft);
-  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .button:focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline-offset: 1px;
 }

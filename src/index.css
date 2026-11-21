@@ -1,30 +1,69 @@
+/* Markdown Studio — Stageshow look.
+   One warm neutral family (Notion's ink temperature), indigo kept as the
+   single accent. φ ≈ 1.618 drives the spacing scale (5 / 8 / 13 / 21 / 34),
+   the type steps and the editor : preview pane ratio (1 : 1.618). */
+
 :root {
-  --bg: #f8fafc;
+  /* Surfaces — one warm gray family */
+  --bg: #f4f4f2;
   --surface: #ffffff;
-  --surface-muted: #f1f5f9;
-  --text: #1e293b;
-  --muted: #64748b;
-  --border: #e2e8f0;
+  --surface-muted: #ecebe8;
+  --well: #ecebe8;
+  --page: #ffffff;
+  /* Text — three inks, warm */
+  --text: #37352f;
+  --text-strong: #1f1e1b;
+  --muted: #787774;
+  --faint: #a5a4a0;
+  /* Lines */
+  --border: rgba(55, 53, 47, 0.09);
+  --border-strong: rgba(55, 53, 47, 0.16);
+  /* Accent — the one color that means "action" */
   --accent: #4f46e5;
+  --accent-strong: #4338ca;
   --accent-soft: #eef2ff;
-  --code-bg: #f1f5f9;
-  --code-block-bg: #0f172a;
-  --code-block-text: #f8fafc;
+  --accent-text: #ffffff;
+  /* Status */
+  --success: #15803d;
+  /* Code */
+  --code-bg: #f1f0ee;
+  --code-block-bg: #1f1e1b;
+  --code-block-text: #f4f4f2;
+  /* Shape — φ-stepped radii */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 13px;
+  /* Shadows — one language, soft and low */
+  --shadow-page: 0 1px 2px rgba(55, 53, 47, 0.08), 0 8px 24px rgba(55, 53, 47, 0.08);
+  --shadow-float: 0 1px 2px rgba(55, 53, 47, 0.12), 0 8px 28px rgba(55, 53, 47, 0.18);
+  /* Motion — one curve, one short duration; motion only on feedback */
+  --ease: cubic-bezier(0.25, 0.8, 0.25, 1);
+  --dur: 150ms;
   color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --bg: #0f172a;
-  --surface: #1e293b;
-  --surface-muted: #16233a;
-  --text: #e2e8f0;
-  --muted: #94a3b8;
-  --border: #334155;
+  --bg: #191817;
+  --surface: #232221;
+  --surface-muted: #2e2d2b;
+  --well: #1c1b1a;
+  --page: #232221;
+  --text: #e8e6e3;
+  --text-strong: #f5f4f2;
+  --muted: #a5a4a0;
+  --faint: #6f6e6a;
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.18);
   --accent: #818cf8;
+  --accent-strong: #a5b4fc;
   --accent-soft: #312e81;
-  --code-bg: #334155;
-  --code-block-bg: #020617;
-  --code-block-text: #f1f5f9;
+  --accent-text: #ffffff;
+  --success: #4ade80;
+  --code-bg: #2e2d2b;
+  --code-block-bg: #111110;
+  --code-block-text: #e8e6e3;
+  --shadow-page: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-float: 0 1px 2px rgba(0, 0, 0, 0.5), 0 8px 28px rgba(0, 0, 0, 0.55);
   color-scheme: dark;
 }
 
@@ -34,11 +73,18 @@
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
   background: var(--bg);
   color: var(--text);
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
   min-height: 100vh;
+}
+
+::selection {
+  background: var(--accent-soft);
 }
