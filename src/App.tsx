@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Columns2,
   Copy,
@@ -15,8 +15,10 @@ import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { Toolbar } from './components/Toolbar';
 import { Editor } from './components/Editor';
 import { Preview } from './components/Preview';
+import { StatsBar } from './components/StatsBar';
+import { Outline } from './components/Outline';
 import { StatusBar } from './components/StatusBar';
-import { buildStandaloneHtml, renderMarkdown } from './lib/markdown';
+import { buildStandaloneHtml, renderDocument, renderMarkdown } from './lib/markdown';
 import styles from './App.module.css';
 
 function download(filename: string, content: string, mime: string) {
@@ -64,6 +66,16 @@ function Shell() {
   const { state, dispatch } = useEditor();
   const [notice, setNotice] = useState<string | null>(null);
 
+  // One render per keystroke: HTML + live render time + token-stream stats.
+  const rendered = useMemo(() => renderDocument(state.markdown), [state.markdown]);
+  const { stats } = rendered;
+
+  // Datasheet title: version + the numbers that prove it, in the tab too.
+  const datasheet = `${stats.words.toLocaleString()} words · ${stats.headingCount.toLocaleString()} headings · rendered in ${rendered.ms.toFixed(1)} ms`;
+  useEffect(() => {
+    document.title = `Markdown Studio v2 — ${datasheet}`;
+  }, [datasheet]);
+
   const flash = (message: string) => {
     setNotice(message);
     window.setTimeout(() => setNotice((current) => (current === message ? null : current)), 3000);
@@ -86,6 +98,7 @@ function Shell() {
 
   const showEditor = state.viewMode === 'split' || state.viewMode === 'editor';
   const showPreview = state.viewMode === 'split' || state.viewMode === 'preview';
+  const showOutline = showPreview;
 
   return (
     <div className={styles.app}>
@@ -110,8 +123,8 @@ function Shell() {
             <path d="M22 16.5v6M24 16.5v8M26 16.5v6" />
           </svg>
           <div className={styles.brandText}>
-            <h1 className={styles.title}>Markdown Studio</h1>
-            <span className={styles.subtitle}>Live Markdown editor &amp; preview</span>
+            <h1 className={styles.title}>Markdown Studio v2</h1>
+            <span className={styles.subtitle}>{datasheet}</span>
           </div>
         </div>
         <div className={styles.actions}>
@@ -166,6 +179,8 @@ function Shell() {
         </div>
       </header>
 
+      <StatsBar stats={stats} renderMs={rendered.ms} />
+
       <Toolbar />
 
       {notice && (
@@ -174,9 +189,16 @@ function Shell() {
         </div>
       )}
 
-      <main className={`${styles.main} ${state.viewMode === 'split' ? styles.mainSplit : styles.mainSingle}`}>
+      <main
+        className={`${styles.main} ${state.viewMode === 'split' ? styles.mainSplit : styles.mainSingle} ${showOutline ? styles.mainOutline : ''}`}
+      >
+        {showOutline && (
+          <div className={styles.outlineSlot}>
+            <Outline headings={stats.headings} />
+          </div>
+        )}
         {showEditor && <Editor />}
-        {showPreview && <Preview />}
+        {showPreview && <Preview html={rendered.html} />}
       </main>
 
       <StatusBar />

@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
   background: var(--bg);
   color: var(--text);
 }
@@ -243,7 +246,81 @@
   grid-template-columns: 1fr;
 }
 
+/* Round 2: outline rail on the left whenever the preview is visible. */
+.mainOutline.mainSplit {
+  grid-template-columns: 208px 1fr 1.618fr;
+}
+
+.mainOutline.mainSingle {
+  grid-template-columns: 208px 1fr;
+}
+
+.outlineSlot {
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  /* Outline is a desktop density feature; phones keep editor + preview. */
+  .outlineSlot {
+    display: none;
+  }
+
+  .mainOutline.mainSplit,
+  .mainOutline.mainSingle {
+    grid-template-columns: 1fr;
+  }
+
+  .mainOutline.mainSplit {
+    grid-template-rows: 1fr 1.618fr;
+  }
+}
+
 @media (max-width: 800px) {
+  /* Header wraps to two rows; every control reaches a 44px tap target. */
+  .header {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 56px;
+    padding: 8px 12px;
+    gap: 8px;
+    row-gap: 8px;
+  }
+
+  .brand {
+    flex: 1 1 auto;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+    width: 100%;
+    margin-left: 0;
+    gap: 8px;
+  }
+
+  .actionButton,
+  .viewButton {
+    min-height: 44px;
+  }
+
+  .viewToggle {
+    height: 44px;
+  }
+
+  .viewButton {
+    height: 40px;
+  }
+
+  .iconOnly {
+    min-width: 44px;
+  }
+
+  .main {
+    padding: 10px 12px 12px;
+    gap: 10px;
+  }
+
   .mainSplit {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1.618fr;
@@ -251,5 +328,11 @@
 
   .subtitle {
     display: none;
+  }
+
+  .notice {
+    max-width: calc(100vw - 24px);
+    white-space: normal;
+    text-align: center;
   }
 }

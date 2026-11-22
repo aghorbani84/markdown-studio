@@ -1,0 +1,83 @@
+/* Live stats bar + proof strip: one surface, hairline cells, theme tokens only.
+   Horizontal scroll on narrow screens — never page overflow. */
+
+.bar {
+  display: flex;
+  align-items: stretch;
+  flex: none;
+  margin: 13px 21px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  flex: none;
+  padding: 7px 16px;
+  border-right: 1px solid var(--border);
+  min-width: 0;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  white-space: nowrap;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Proof strip: the audit line — live-measured, accent-tinted, pinned right. */
+.proof {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  margin-left: auto;
+  padding: 7px 16px;
+  background: var(--accent-soft);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.liveDot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+@media (max-width: 800px) {
+  .bar {
+    margin: 10px 12px 0;
+  }
+
+  .cell {
+    padding: 7px 12px;
+  }
+
+  /* Phones: the proof strip leads, so it is visible without scrolling. */
+  .proof {
+    order: -1;
+    margin-left: 0;
+    padding: 7px 12px;
+  }
+}

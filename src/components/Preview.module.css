@@ -197,3 +197,14 @@
   font-size: 13px;
   line-height: 1.6;
 }
+
+@media (max-width: 800px) {
+  /* Phone: the sheet breathes less so content, not margins, fills the screen. */
+  .scroll {
+    padding: 12px 12px 20px;
+  }
+
+  .page {
+    padding: 20px 16px 28px;
+  }
+}

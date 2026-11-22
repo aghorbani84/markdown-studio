@@ -38,6 +38,18 @@
   transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
+@media (max-width: 800px) {
+  /* 44px tap targets on phones. */
+  .toolbar {
+    padding: 6px 12px;
+  }
+
+  .button {
+    width: 44px;
+    height: 44px;
+  }
+}
+
 .button:hover {
   background: var(--surface-muted);
   color: var(--text-strong);

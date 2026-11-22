@@ -5,7 +5,7 @@
 // DOMPurify needs outside a browser.
 import { execSync } from 'node:child_process';
 import { JSDOM } from 'jsdom';
-import { mkdirSync, rmSync } from 'node:fs';
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 const TMP = new URL('./.tmp-render/', import.meta.url).pathname;
@@ -13,8 +13,16 @@ mkdirSync(TMP, { recursive: true });
 
 try {
   execSync(
-    `npx tsc src/lib/markdown.ts src/lib/sample.ts --ignoreConfig --target es2022 --module nodenext --moduleResolution nodenext --skipLibCheck --outDir ${TMP}`,
+    `npx tsc src/lib/markdown.ts src/lib/stats.ts src/lib/sample.ts --ignoreConfig --target es2022 --module es2022 --moduleResolution bundler --skipLibCheck --outDir ${TMP}`,
     { stdio: 'inherit' },
+  );
+
+  // Node ESM needs explicit extensions; the sources use extensionless
+  // imports (bundler style), so patch the temp output only.
+  const markdownJs = `${TMP}markdown.js`;
+  writeFileSync(
+    markdownJs,
+    readFileSync(markdownJs, 'utf8').replaceAll("'./stats'", "'./stats.js'"),
   );
 
   const { window } = new JSDOM('');

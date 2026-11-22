@@ -1,12 +1,14 @@
-import { useMemo } from 'react';
 import { FileText } from 'lucide-react';
-import { renderMarkdown } from '../lib/markdown';
 import { useEditor } from '../state/store';
 import styles from './Preview.module.css';
 
-export function Preview() {
+interface PreviewProps {
+  /** Sanitised HTML rendered by the Shell (single render per keystroke). */
+  html: string;
+}
+
+export function Preview({ html }: PreviewProps) {
   const { state } = useEditor();
-  const html = useMemo(() => renderMarkdown(state.markdown), [state.markdown]);
   const isEmpty = state.markdown.trim() === '';
 
   return (

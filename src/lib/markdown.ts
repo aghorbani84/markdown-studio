@@ -1,5 +1,8 @@
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import { analyzeDocument, type DocumentStats, type HeadingEntry } from './stats';
+
+export { countCharsNoSpaces, countWords } from './stats';
 
 marked.setOptions({ gfm: true, breaks: true });
 
@@ -9,17 +12,41 @@ export function renderMarkdown(markdown: string): string {
   return DOMPurify.sanitize(raw);
 }
 
-/** Count words in a document (whitespace-separated tokens). */
-export function countWords(text: string): number {
-  const trimmed = text.trim();
-  if (!trimmed) return 0;
-  return trimmed.split(/\s+/).length;
+export interface RenderedDocument {
+  /** Sanitised HTML with a unique `id` on every heading (see stats.ts). */
+  html: string;
+  /** Wall-clock time of marked.parse + sanitise, measured live. */
+  ms: number;
+  stats: DocumentStats;
 }
 
-/** Count non-whitespace characters. */
-export function countCharsNoSpaces(text: string): number {
-  return text.replace(/\s/g, '').length;
+/**
+ * Render + measure + analyse in one pass. `ms` comes from performance.now()
+ * around the real render — never a hard-coded number.
+ */
+export function renderDocument(markdown: string): RenderedDocument {
+  const stats = analyzeDocument(markdown);
+  const start = performance.now();
+  const raw = marked.parse(markdown) as string;
+  const withIds = addHeadingIds(raw, stats.headings);
+  const html = DOMPurify.sanitize(withIds);
+  return { html, ms: performance.now() - start, stats };
 }
+
+/**
+ * Stamp the outline ids onto the rendered headings, in document order.
+ * marked's default renderer emits bare `<h1>`…`<h6>` tags, so a sequential
+ * replace lines up exactly with the token stream `analyzeDocument` walked.
+ */
+function addHeadingIds(html: string, headings: HeadingEntry[]): string {
+  let index = 0;
+  return html.replace(/<h([1-6])>/g, (match, level: string) => {
+    const entry = headings[index++];
+    if (!entry || entry.depth !== Number(level)) return match;
+    return `<h${level} id="${entry.id}">`;
+  });
+}
+
 
 const EXPORT_CSS = `
   body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #1f2937; max-width: 760px; margin: 2rem auto; padding: 0 1.5rem; }
