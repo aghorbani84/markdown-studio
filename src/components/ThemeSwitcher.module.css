@@ -1,0 +1,75 @@
+.switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.styleToggle {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 2px;
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+}
+
+.styleButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius-md) - 2px);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.styleButton:hover {
+  color: var(--text);
+}
+
+.styleButton:focus-visible,
+.modeButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.styleButtonActive {
+  background: var(--surface);
+  color: var(--text-strong);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+/* Gold active pill in Achaemenid, indigo in Modern — via the accent token. */
+:global(:root[data-style='achaemenid']) .styleButtonActive {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.modeButton {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.modeButton:hover {
+  background: var(--surface-muted);
+}

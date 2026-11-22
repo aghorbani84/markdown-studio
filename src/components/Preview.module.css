@@ -68,6 +68,22 @@
   margin: 1.1em 0 0.5em;
   color: var(--text-strong);
   letter-spacing: -0.01em;
+  font-family: var(--display-font);
+}
+
+/* Achaemenid preview: Cinzel headings, double gold rule under h1, lapis links. */
+:global(:root[data-style='achaemenid']) .preview h1,
+:global(:root[data-style='achaemenid']) .preview h2,
+:global(:root[data-style='achaemenid']) .preview h3 {
+  letter-spacing: 0.04em;
+}
+
+:global(:root[data-style='achaemenid']) .preview h1 {
+  border-bottom: 3px double var(--accent);
+}
+
+:global(:root[data-style='achaemenid']) .preview a {
+  color: var(--secondary);
 }
 
 .preview h1 {

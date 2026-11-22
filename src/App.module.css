@@ -40,11 +40,39 @@
 
 .title {
   margin: 0;
+  font-family: var(--display-font);
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--text-strong);
   white-space: nowrap;
+}
+
+/* Faravahar accent: hidden in Modern, gold in Achaemenid (one place only). */
+.faravahar {
+  display: none;
+  flex: none;
+  color: var(--accent);
+}
+
+:global(:root[data-style='achaemenid']) .faravahar {
+  display: block;
+}
+
+/* Achaemenid header: fluted-column strip + thin double gold rule; Cinzel title. */
+:global(:root[data-style='achaemenid']) .header {
+  border-bottom: 3px double var(--accent);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 12px,
+    color-mix(in srgb, var(--line) 40%, transparent) 12px 13px
+  );
+}
+
+:global(:root[data-style='achaemenid']) .title {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 14px;
 }
 
 .subtitle {
